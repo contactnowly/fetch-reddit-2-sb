@@ -1,5 +1,5 @@
 import express from 'express';
-import { submitReddit } from '../submit-reddit.js'; // Subir un nivel desde Tests para acceder al archivo principal
+import { submitReddit } from '../index.js'; // Subir un nivel desde Tests para acceder al archivo principal
 
 const app = express();
 const PORT = 3000;
