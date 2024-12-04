@@ -20,15 +20,18 @@ export async function retrieveTopics() {
         const result = await client.query(query);
         client.release();
 
-        // Agrupar los resultados por global_label (sector)
+        // Formatear el resultado en el formato deseado
         const topics = result.rows.reduce((acc, row) => {
-            if (!acc[row.global_label]) acc[row.global_label] = [];
-            acc[row.global_label].push(row.subreddit);
+            const { global_label, subreddit } = row;
+
+            if (!acc[global_label]) acc[global_label] = []; // Si no existe el sector, inicialízalo
+            acc[global_label].push(subreddit); // Agrega el subreddit al sector correspondiente
+
             return acc;
         }, {});
 
         console.log('Topics obtenidos de la base de datos:', topics);
-        return topics;
+        return topics; // Devuelve el objeto en el formato deseado
     } catch (error) {
         console.error('Error al obtener los topics desde la base de datos:', error);
         throw error;
