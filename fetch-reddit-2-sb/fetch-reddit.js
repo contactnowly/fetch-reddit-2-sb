@@ -1,6 +1,7 @@
 import snoowrap from 'snoowrap';
 import dotenv from 'dotenv';
-import topicsReddit from './topicsReddit.js'; // Importar los tópicos de subreddits
+import { retrieveTopics } from './retrieve-topics.js'; // Importar la función desde el archivo correspondiente
+import topicsReddit from './topicsReddit.js'; // Importar los tópicos de subreddits (desde el archivo)
 
 dotenv.config(); // Cargar las variables de entorno desde .env
 
