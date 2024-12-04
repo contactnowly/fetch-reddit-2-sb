@@ -20,9 +20,18 @@ export async function retrieveTopics() {
         const result = await client.query(query);
         client.release();
 
+        if (result.rows.length === 0) {
+            throw new Error('No se encontraron datos en la tabla "topics".');
+        }
+
         // Formatear el resultado en el formato deseado
         const topics = result.rows.reduce((acc, row) => {
             const { global_label, subreddit } = row;
+
+            if (!global_label || !subreddit) {
+                console.warn('Dato inválido encontrado:', row);
+                return acc; // Ignorar filas con datos incompletos
+            }
 
             if (!acc[global_label]) acc[global_label] = []; // Si no existe el sector, inicialízalo
             acc[global_label].push(subreddit); // Agrega el subreddit al sector correspondiente
