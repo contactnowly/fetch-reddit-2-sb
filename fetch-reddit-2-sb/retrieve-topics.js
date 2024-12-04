@@ -39,7 +39,7 @@ export async function retrieveTopics() {
             return acc;
         }, {});
 
-        console.log('Topics obtenidos de la base de datos:', topics);
+        // console.log('Topics obtenidos de la base de datos:', topics);
         return topics; // Devuelve el objeto en el formato deseado
     } catch (error) {
         console.error('Error al obtener los topics desde la base de datos:', error);
