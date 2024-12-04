@@ -14,7 +14,7 @@ const reddit = new snoowrap({
 });
 
 // Función para obtener datos de múltiples subreddits
-async function fetchDataReddit(subreddits, limit = 10) {
+async function fetchDataReddit(limit = 10) {
     const outputData = []; // Aquí se almacenarán los datos procesados
 
     try {
@@ -22,13 +22,17 @@ async function fetchDataReddit(subreddits, limit = 10) {
         const topics = await retrieveTopics();
         console.log('Tópicos obtenidos desde la base de datos:', topics);
 
+        // Convertir los tópicos en un arreglo plano de subreddits
+        const subreddits = Object.values(topics).flat();
+        console.log('Lista de subreddits:', subreddits);
+
         for (const subreddit of subreddits) {
             console.log(`Obteniendo posts del subreddit: ${subreddit}...`);
 
             // Determinar el global_label basado en la base de datos
             const globalLabel = Object.keys(topics).find(key =>
                 topics[key].includes(subreddit)
-            ) || null; // Si no encuentra el subreddit, asigna null
+            ) || null;
 
             if (!globalLabel) {
                 console.warn(`No se encontró un global_label para el subreddit: ${subreddit}`);
