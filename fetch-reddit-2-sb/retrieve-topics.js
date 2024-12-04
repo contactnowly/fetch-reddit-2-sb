@@ -1,12 +1,15 @@
 import pkg from 'pg';
 const { Pool } = pkg;
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const pool = new Pool({
-    host: 'aws-0-sa-east-1.pooler.supabase.com',
-    user: 'postgres.wfkjjwlbnevwqxurtabu',
-    password: 'nowlygrid123',
-    database: 'postgres',
-    port: 6543,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
     ssl: { rejectUnauthorized: false },
 });
 
