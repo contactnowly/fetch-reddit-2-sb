@@ -1,7 +1,6 @@
 import snoowrap from 'snoowrap';
 import dotenv from 'dotenv';
 import { retrieveTopics } from './retrieve-topics.js'; // Importar la función desde el archivo correspondiente
-import topicsReddit from './topicsReddit.js'; // Importar los tópicos de subreddits (desde el archivo)
 
 dotenv.config(); // Cargar las variables de entorno desde .env
 
@@ -19,13 +18,21 @@ async function fetchDataReddit(subreddits, limit = 10) {
     const outputData = []; // Aquí se almacenarán los datos procesados
 
     try {
+        // Obtener los tópicos dinámicamente desde la base de datos
+        const topics = await retrieveTopics();
+        console.log('Tópicos obtenidos desde la base de datos:', topics);
+
         for (const subreddit of subreddits) {
             console.log(`Obteniendo posts del subreddit: ${subreddit}...`);
 
-            // Determinar el global_label basado en el tópico del subreddit
-            const globalLabel = Object.keys(topicsReddit).find(key =>
-                topicsReddit[key].includes(subreddit)
+            // Determinar el global_label basado en la base de datos
+            const globalLabel = Object.keys(topics).find(key =>
+                topics[key].includes(subreddit)
             ) || null; // Si no encuentra el subreddit, asigna null
+
+            if (!globalLabel) {
+                console.warn(`No se encontró un global_label para el subreddit: ${subreddit}`);
+            }
 
             // Obtiene los posts más populares del subreddit
             const posts = await reddit.getHot(subreddit, { limit });
@@ -36,7 +43,7 @@ async function fetchDataReddit(subreddits, limit = 10) {
                 source: "reddit",
                 channel: subreddit,
                 title: post.title,
-                global_label: globalLabel, // Etiqueta global según el tópico
+                global_label: globalLabel, // Etiqueta global según los tópicos de la base de datos
                 sectorial_label: null,
                 text: post.selftext || '',
                 social_score: post.score,
